@@ -1,8 +1,7 @@
 import pygame
 
 class Piece :
-
-  position = ()
+  
   coords = ()
   size = 0.0
 

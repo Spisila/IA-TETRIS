@@ -1,7 +1,6 @@
-import pygame, sys, random, enum
+import pygame, sys, random
 from pygame.locals import *
 from typing import Tuple
-from enum import Enum
 
 import grid, grid_cell, piece, tetrominoe
 
@@ -24,6 +23,7 @@ display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 fps = 60
 frames_per_sec = pygame.time.Clock()
 
+gravity_ticks = 50
 
 active_tetrominoe = tetrominoe.Tetrominoe((5,5), 0)
 
@@ -47,8 +47,10 @@ def ready() -> None :
 
 def update() -> None :
 
-  while True :
+  gravity_ticks_counter = 0
 
+  while True :
+    
     for event in pygame.event.get() :
       if event.type == QUIT :
         pygame.quit()
@@ -59,6 +61,16 @@ def update() -> None :
     current_grid.draw_cells(display)
     current_grid.draw_pieces(display)
 
+    # ------------------------------- #
+
+    gravity_ticks_counter += 1
+
+    if gravity_ticks_counter >= gravity_ticks :
+      
+      for piece in active_tetrominoe.pieces :
+        piece.coords = (piece.coords[0], piece.coords[1] + 1)
+      
+      gravity_ticks_counter = 0
 
     pygame.display.update()
     frames_per_sec.tick(fps)
